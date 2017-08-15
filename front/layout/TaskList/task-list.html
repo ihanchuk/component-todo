@@ -1,0 +1,48 @@
+<h2>Task List</h2>
+<div class="container filtering">
+    <div class="row col-md-4">
+        <h3>Sorting</h3>
+        <span>Sorting::</span>
+        <select ng-model="$ctrl.tasksSortOrder">
+            <option value="name">Ascending</option>
+            <option value="-name">Descending</option>
+        </select>
+    </div>
+    <div class="row col-md-3">
+        <h3>Filtering</h3>
+        <span>Display only completed tasks:: </span>
+        <input type="checkbox" ng-model="$ctrl.tasksFilteringParam">
+    </div>
+</div>
+<hr />
+    <table class="table table-striped" id="tasksArea">
+        <tr class="headerRow">
+            <td>Task</td>
+            <td>Complete Task</td>
+            <td>Delete Task</td>
+        </tr>
+        <tr ng-repeat="task in $ctrl.taskListService.getTasks()
+            | orderBy: $ctrl.tasksSortOrder
+            | filter: ($ctrl.tasksFilteringParam || '') && {completed: $ctrl.tasksFilteringParam}">
+            <td><span ng-class="{completed:task.completed}">{{task.name}}</span></td>
+            <td>
+                <button  class="btn btn-primary btn" ng-click="$ctrl.taskListService.changeTaskStatus(task)">
+                Change status
+                </button>
+            </td>
+            <td>
+                <button  class="btn btn-primary btn btn-danger"
+                         ng-click="$ctrl.taskListService.removeTask(task)">
+                    Delete
+                </button>
+            </td>
+        </tr>
+    </table>
+<div>
+    <h3>Add new task</h3>
+    <input type="text" ng-model="$ctrl.newTask" />
+    <button class="btn btn-primary"
+            ng-click="$ctrl.taskListService.addTask($ctrl.newTask)">
+        New task
+    </button>
+</div>
